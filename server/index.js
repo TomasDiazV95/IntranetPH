@@ -356,6 +356,7 @@ app.get('/fecha-compromiso', async (req, res) => {
     }
   });
 
+app.get('/ping', (req, res) => res.send('pong'));
 
 // Rut Gestion + Fecha de Compromiso
 app.get('/gestion-compromiso', async (req, res) => {
