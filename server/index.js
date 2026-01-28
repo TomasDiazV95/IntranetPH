@@ -515,7 +515,83 @@ app.post('/consulta-email', async (req, res) => {
 // Rutas nuevas de carta automática
 app.use("/carta", cartaRoutes);
 
+// Ruta Gestion por RUT (sin DV)
+app.get('/gestionRut', async (req, res) => {
+  const { fechaInicio, fechaFin, cartera, rut } = req.query;
 
+  if (!fechaInicio || !fechaFin || !cartera || !rut) {
+    return res.status(400).json({
+      error: 'Parámetros requeridos: fechaInicio, fechaFin, cartera, rut'
+    });
+  }
+
+  // deja solo números
+  const rutLimpio = String(rut).replace(/\D/g, '');
+
+  const query = `
+    SELECT
+        cliente.rut,
+        cliente.dv,
+        cliente.nombreCliente,
+        UPPER(gestion.username) AS UsuarioGestion, 
+        tipogestion.nombre AS AccionGestion,
+        tipodeudor.nombre AS ContactoGestion,
+        respuesta.nombre AS RespuestaGestion,
+        gestion.observaciones,
+        DATE_FORMAT(gestion.fechaInsert, '%d-%m-%Y') AS GestionFecha,
+        DATE_FORMAT(gestion.fechaInsert, '%T') AS GestionHora,
+        gestion.nroDocumento,
+        IF(telefono.telefono IS NULL, gestion.fono, telefono.telefono) as telefono
+    FROM
+        gestion
+    LEFT JOIN cliente on gestion.rut = cliente.rut
+    LEFT JOIN tipogestion on gestion.idTipoGestion = tipogestion.idTipoGestion
+    LEFT JOIN tipodeudor on gestion.idTipoDeudor = tipodeudor.idTipoDeudor
+    LEFT JOIN respuesta on gestion.idRespuesta = respuesta.idRespuesta
+    LEFT JOIN telefono on gestion.idTelefono = telefono.idTelefono
+    WHERE
+        gestion.idCartera IN (?)
+        AND gestion.fechaInsert BETWEEN CONCAT(?, ' 00:00:00') AND CONCAT(?, ' 23:59:59')
+        AND gestion.rut = ?
+    GROUP BY 1,9,10,12
+
+    UNION ALL
+
+    SELECT
+        cliente.rut,
+        cliente.dv,
+        cliente.nombreCliente as nombreCliente,
+        vicidial_log.user AS UsuarioGestion,
+        'Gestion Discador' AS AccionGestion,
+        'Gestion Discador' AS ContactoGestion,
+        vicidial_log.status AS RespuestaGestion,
+        'Llamada por Discador' as obs,
+        DATE_FORMAT(vicidial_log.call_date, '%d-%m-%Y') AS GestionFecha,
+        DATE_FORMAT(vicidial_log.call_date, '%T') AS GestionHora,
+        '' as datadocu,
+        vicidial_log.phone_number
+    FROM
+        vicidial_log
+    LEFT JOIN vicidial_list on vicidial_log.lead_id = vicidial_list.lead_id
+    LEFT JOIN cliente on vicidial_list.vendor_lead_code = cliente.rut
+    WHERE
+        vicidial_log.user = 'VDAD'
+        AND vicidial_list.postal_code IN (?)
+        AND vicidial_log.call_date BETWEEN CONCAT(?, ' 00:00:00') AND CONCAT(?, ' 23:59:59')
+        AND vicidial_list.vendor_lead_code = ?;
+  `;
+
+  try {
+    const [rows] = await db.query(query, [
+      cartera, fechaInicio, fechaFin, rutLimpio,
+      cartera, fechaInicio, fechaFin, rutLimpio
+    ]);
+    res.json(rows);
+  } catch (error) {
+    console.error('❌ Error al ejecutar consulta /gestionRut:', error);
+    res.status(500).json({ error: 'Error al obtener datos de gestión por RUT' });
+  } 
+});
 
 
 
