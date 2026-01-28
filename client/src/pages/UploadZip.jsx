@@ -13,7 +13,7 @@ function UploadZip() {
     formData.append('zip_file', file);
 
     try {
-      const response = await axios.post('http://192.168.1.99:5555/upload', formData, {
+      const response = await axios.post('http://192.168.1.75:5555/upload', formData, {
         responseType: 'blob',
         headers: { 'Content-Type': 'multipart/form-data' }
       });

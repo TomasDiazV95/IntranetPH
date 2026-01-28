@@ -169,7 +169,7 @@ const ContactoDirecto = () => {
     setIsDownloading(true);
 
     try {
-      const { data } = await axios.post('http://192.168.1.8:5555/contacto-directo', {
+      const { data } = await axios.post('http://192.168.1.75:5555/contacto-directo', {
         ruts,
         fechaInicio,
         fechaFin,

@@ -39,7 +39,7 @@ function FechaCompromiso() {
 
     setLoading(true);
     try {
-      const res = await axios.get('http://192.168.1.8:5555/fecha-compromiso', {
+      const res = await axios.get('http://192.168.1.75:5555/fecha-compromiso', {
         params: { fechaInicio, fechaFin, cartera }
       });
 

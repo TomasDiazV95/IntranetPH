@@ -32,7 +32,7 @@ function EmailConsulta() {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://192.168.1.8:5555/consulta-email', { ruts });
+      const response = await axios.post('http://192.168.1.75:5555/consulta-email', { ruts });
       const data = response.data;
 
       // 🟡 Formatear fechas en 'dd-mm-yyyy'

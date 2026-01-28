@@ -43,7 +43,7 @@ function GestionCompromiso() {
   
     setLoading(true);
     try {
-      const res = await axios.get('http://192.168.1.99:5555/gestion-compromiso', {
+      const res = await axios.get('http://192.168.1.975:5555/gestion-compromiso', {
         params: { fechaInicio, fechaFin, cartera }
       });
   

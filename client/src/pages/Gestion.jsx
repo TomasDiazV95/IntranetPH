@@ -64,7 +64,7 @@ function Gestion() {
     const fechaIniStr = fechaInicio;
     const fechaFinStr = fechaFin;
 
-    const res = await axios.get('http://192.168.1.8:5555/gestion', {
+    const res = await axios.get('http://192.168.1.75:5555/gestion', {
       params: {
         fechaInicio: fechaIniStr,
         fechaFin: fechaFinStr,
