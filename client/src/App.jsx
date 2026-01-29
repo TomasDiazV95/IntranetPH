@@ -10,6 +10,7 @@ import UploadZip from './pages/UploadZip';
 import PrivateRoute from './components/PrivateRoute';
 import EmailConsulta from './pages/EmailConsulta';
 import CartaAutomatica from './pages/CartaAutomatica';
+import GestionPorRut from './pages/GestionPorRut';
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
         <Route path="/contacto-directo" element={<PrivateRoute><Layout><ContactoDirecto /></Layout></PrivateRoute>}/>
         <Route path="/upload" element={<PrivateRoute><Layout><UploadZip /></Layout></PrivateRoute>}/>
         <Route path="/consulta-email" element={<PrivateRoute><Layout><EmailConsulta /></Layout></PrivateRoute>}/>
-        <Route path="/carta" element={<PrivateRoute><Layout><CartaAutomatica /></Layout></PrivateRoute>}/>
+        <Route path="/gestion-rut" element={<PrivateRoute><Layout><GestionPorRut /></Layout></PrivateRoute>}/>
       </Routes>
     </Router>
   );
