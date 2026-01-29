@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { nombreCarteras } from '../constants/carteras';
 
 function limpiarRutSinDv(valor) {
-  // deja SOLO números (sin puntos, sin guión, sin DV)
+  // deja SOLO números (sin puntos, sin guión, sin DV)a
   return (valor || '').toString().replace(/\D/g, '');
 }
 
@@ -42,12 +42,12 @@ function GestionPorRut() {
       const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
 
       saveAs(blob, `Gestion_${nombre}_RUT_${rutLimpio}_${fechaInicio}.csv`);
-    } /* catch (err) {
+    } catch (err) {
       alert('Error al descargar CSV');
       console.error(err);
-    } */
+    }
 
-    catch (err) {
+/*     catch (err) {
     console.error("❌ Axios error completo:", err);
 
     const status = err?.response?.status;
@@ -60,7 +60,7 @@ function GestionPorRut() {
       `msg: ${msg ?? "sin mensaje"}\n` +
       `data: ${data ? JSON.stringify(data) : "sin data"}`
     );
-  }
+  } */
   };
 
   return (
